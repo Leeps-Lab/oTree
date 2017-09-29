@@ -169,6 +169,12 @@ SESSION_CONFIGS = [
         'app_sequence': ['stochastic_bimatrix', 'payment_info'],
         'treatment': 'A'
     },
+    {
+        'name': 'bootscats',
+        'display_name': "Boots-Cats Game",
+        'num_demo_participants': 2,
+        'app_sequence': ['bootscats', 'payment_info']
+    },
 ]
 
 # anything you put after the below line will override
