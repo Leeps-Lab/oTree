@@ -48,7 +48,7 @@ class Results(Page):
 
 def get_config_columns(group):
     payoffs = group.subsession.payoff_grid()
-    payoffs = reduce(concat, payoffs)
+    payoffs = reduce(concat, reduce(concat, payoffs))
     config = parse_config(group.session.config['config_file'])
     role_shuffle = config[group.round_number - 1]['shuffle_role']
     return payoffs + [role_shuffle]
@@ -86,8 +86,8 @@ def get_output_table(events):
     if not events:
         return [], []
     rows = []
-    minT = min(e.timestamp for e in events)
-    maxT = max(e.timestamp for e in events)
+    minT = min(e.timestamp for e in events if e.channel=="state")
+    maxT = max(e.timestamp for e in events if e.channel=="state")
     current_matrix = 0
     p1, p2 = events[0].group.get_players()
     p1_code = p1.participant.code
