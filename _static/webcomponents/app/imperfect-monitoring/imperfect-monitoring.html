@@ -41,7 +41,14 @@
                 display: flex;
                 flex-direction: row;
                 align-self: center;
-                margin: 20px;
+                margin-bottom: 20px;
+            }
+
+            #titles {
+                display: flex;
+                flex-direction: row;
+                align-self: center;
+                text-align: center;
             }
 
             .graph {
@@ -56,8 +63,10 @@
                 margin: 10px 0 10px 0;
                 width: 200px;
                 height: 20px;
-                background: black;
+                font-weight: bold;
+                background: #aaa;
                 align-self: flex-end;
+                text-align: center;
             }
 
             #progress[hidden] {
@@ -71,12 +80,12 @@
             }
 
             #buttonA {
-                background-color: grey;
+                background-color: #aaa;
             }
 
             #buttonB {
                 color: white;
-                background-color: grey;
+                background-color: #aaa;
             }
 
             .btn.focus, .btn:focus {
@@ -120,11 +129,20 @@
         </div>
 
         <div id="progressAndGraphs">
-            <progress
+            <!--<progress
                 id="progress"
                 value="[[ pauseProgress ]]"
                 hidden$="[[ hideProgress ]]">
-            </progress>
+            </progress>-->
+            <div id="progress"></div>
+
+            <div id="titles">
+            <div style="width:150px">CurrSubperiod</div>
+            <div style="width:600px">History Graph</div>
+            <div style="width:100px" hidden$="[[ !displayAverageAGraph ]]">AverageA</div>
+            <div style="width:100px" hidden$="[[ !displayAverageBGraph ]]">AverageB</div>
+            <div style="width:100px" hidden$="[[ !displayAverageABGraph ]]">AverageAB</div>
+            </div>
             <div id="graphs">
                 <div id="currSubperiodGraph" class="graph"></div>
                 <div id="historyGraph" class="graph"></div>
@@ -164,7 +182,7 @@
                 </tr>
                 <tr>
                     <th colspan="2" rowspan="2"></th>
-                    <th colspan="2">Other Player's Choice</th>
+                    <th colspan="2">Opponent</th>
                 <tr>
                     <th>Contribute</th>
                     <th>Don't</th>
@@ -344,9 +362,9 @@
                 var buttonB = document.getElementById("buttonB").style;
                 if (this.fixedDecision == 1){
                     buttonA.backgroundColor = "green";
-                    buttonB.backgroundColor = "gray";
+                    buttonB.backgroundColor = "#aaa";
                 }else if (this.fixedDecision == 0){
-                    buttonA.backgroundColor = "gray";
+                    buttonA.backgroundColor = "#aaa";
                     buttonB.backgroundColor = "orange";
                 }
                 if (msg.realizedPayoffs) {
@@ -468,11 +486,16 @@
                     });
                 }
                 if (msg.hasOwnProperty('pauseProgress')) {
-                    this.hideProgress = false;
-                    this.pauseProgress = msg.pauseProgress;
-                } else {
-                    this.hideProgress = true;
+                    document.getElementById("progress").innerHTML = "LIVE!";
+                }else{
+                    document.getElementById("progress").innerHTML = "";                    
                 }
+                // if (msg.hasOwnProperty('pauseProgress')) {
+                //     this.hideProgress = false;
+                //     this.pauseProgress = msg.pauseProgress;
+                // } else {
+                //     this.hideProgress = true;
+                // }
             },
             _equals(d, decision) {
                 return d == decision;
@@ -503,13 +526,9 @@
                         enabled: false,
                         width: 150
                     },
-                    title: { text: null },
-                    // title: { text: "Current Subperiod",
-                    //          margin: 100,
-                    //          style: { color: "blue"
-
-                    //          }
-                    //  },
+                    title: { 
+                        text: null
+                    },
                     exporting: { enabled: false },
                     tooltip: { enabled: false },
                     legend: { enabled: false },
