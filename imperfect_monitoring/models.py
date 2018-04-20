@@ -68,6 +68,9 @@ class Group(DecisionGroup):
     def subperiod_length(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['subperiod_length']
 
+    def rest_length(self):
+        return parse_config(self.session.config['config_file'])[self.round_number-1]['rest_length']
+
     def displayed_subperiods(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['displayed_subperiods']
 
@@ -79,6 +82,10 @@ class Group(DecisionGroup):
 
     def display_average_ab_graph(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['display_average_ab_graph']
+
+    def number_subperiods(self):
+        return parse_config(self.session.config['config_file'])[self.round_number-1]['num_subperiods']
+
 
     def period_length(self):
         rest_length = parse_config(self.session.config['config_file'])[self.round_number-1]['rest_length']

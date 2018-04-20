@@ -29,10 +29,26 @@
                 align-self: center;
             }
 
+            #scoreTables {
+                display: inline-flex;
+            }
+
+            #matrices{
+                display: inline-flex;
+            }
+
             #graphs {
                 display: flex;
                 flex-direction: row;
                 align-self: center;
+                margin-bottom: 20px;
+            }
+
+            #titles {
+                display: flex;
+                flex-direction: row;
+                align-self: center;
+                text-align: center;
             }
 
             .graph {
@@ -47,8 +63,10 @@
                 margin: 10px 0 10px 0;
                 width: 200px;
                 height: 20px;
-                background: black;
+                font-weight: bold;
+                background: #aaa;
                 align-self: flex-end;
+                text-align: center;
             }
 
             #progress[hidden] {
@@ -57,18 +75,17 @@
             }
 
             #decision {
-                margin-top: 10px;
-                margin-bottom: 10px;
+                margin-bottom: 50px;
                 align-self: center;
             }
 
             #buttonA {
-                background-color: grey;
+                background-color: #aaa;
             }
 
             #buttonB {
                 color: white;
-                background-color: grey;
+                background-color: #aaa;
             }
 
             .btn.focus, .btn:focus {
@@ -86,17 +103,46 @@
             on-event="_onTick">
         </redwood-channel>
 
-        <!--<div id="pointsAndParameters">
-            <div id="pointsChart">Current Points</div>
-            <div id="paramChart"> Parameter Values</div>
-        </div>-->
+        <div id="scoreTables">
+            <table id="score" class="table table-bordered text-center" style="width: 10%; margin-right:10px">
+                <tr>
+                    <th>Current Points</th>
+                </tr>
+                <tr>
+                    <td id="curr-points">0</td>
+                </tr>
+            </table>
+            <table id="param" class="table table-bordered text-center" style="width:10%">
+                <tr>
+                    <th colspan="7">Parameters</th>
+                </tr>
+                <tr>
+                    <th>Displayed Subperiods</th>
+                    <th>Subperiod Length</th>
+                    <th>Rest Length</th>
+                    <th>Display AverageA</th>
+                    <th>Display AverageB</th>
+                    <th>Display AverageAB</th>
+                    <th>Num Subperiods</th>
+                </tr>
+            </table>
+        </div>
 
         <div id="progressAndGraphs">
-            <progress
+            <!--<progress
                 id="progress"
                 value="[[ pauseProgress ]]"
                 hidden$="[[ hideProgress ]]">
-            </progress>
+            </progress>-->
+            <div id="progress"></div>
+
+            <div id="titles">
+            <div style="width:150px">CurrSubperiod</div>
+            <div style="width:600px">History Graph</div>
+            <div style="width:100px" hidden$="[[ !displayAverageAGraph ]]">AverageA</div>
+            <div style="width:100px" hidden$="[[ !displayAverageBGraph ]]">AverageB</div>
+            <div style="width:100px" hidden$="[[ !displayAverageABGraph ]]">AverageAB</div>
+            </div>
             <div id="graphs">
                 <div id="currSubperiodGraph" class="graph"></div>
                 <div id="historyGraph" class="graph"></div>
@@ -129,49 +175,42 @@
             </button>
         </div>
 
-        <table class="table table-bordered text-center" style="width: auto; margin: auto">
-    <tbody><tr>
-        <th colspan="2" rowspan="2"></th>
-        <th colspan="2">Probability of Bad Signal</th>
-    </tr>
-    <tr>
-        <th>Good</th>
-        <th>Bad</th>
-    </tr>
-    <tr>
-        <th rowspan="2"><span class="rotate90">You</span></th>
-        <th>A</th>
-        <td>'100.0', 0.0</td>
-        <td>'125.0', 25.0</td>
-    </tr>
-    <tr>
-        <th>B</th>
-        <td>100.0, 0.0</td>
-        <td>125.0, 25.0</td>
-    </tr>
-</tbody></table>
-
-<table class="table table-bordered text-center" style="width: auto; margin: auto">
-    <tbody><tr>
-        <th colspan="2" rowspan="2"></th>
-        <th colspan="2">Payoff by Signal</th>
-    </tr>
-    <tr>
-        <th>Good</th>
-        <th>Bad</th>
-    </tr>
-    <tr>
-        <th rowspan="2"><span class="rotate90">You</span></th>
-        <th>A</th>
-        <td>'100.0', 0.0</td>
-        <td>'125.0', 25.0</td>
-    </tr>
-    <tr>
-        <th>B</th>
-        <td>100.0, 0.0</td>
-        <td>125.0, 25.0</td>
-    </tr>
-</tbody></table>
+        <div id="matrices">
+            <table id="probability" class="table table-bordered text-center" style="width:10%; margin-right:300px">
+                <tr>
+                    <th colspan="4">Probability of Bad Signal</th>
+                </tr>
+                <tr>
+                    <th colspan="2" rowspan="2"></th>
+                    <th colspan="2">Opponent</th>
+                <tr>
+                    <th>Contribute</th>
+                    <th>Don't</th>
+                </tr>
+                <tr>
+                    <th rowspan="2">Your Choice</th>
+                    <th>Contribute</th>
+                </tr>
+                <tr>
+                    <th>Don't</th>
+                </tr>
+            </table>
+            <table id="payoff" class="table table-bordered text-center" style="width:10%">
+                <tr>
+                    <th colspan="3">Payoff by Signal</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>Good</th>
+                    <th>Bad</th>
+                </tr>
+                <tr>
+                    <th>Contribute</th>
+                </tr>
+                <tr>
+                    <th>Don't Contribute</th>
+                </tr>
+            </table>
     
     </template>
 
@@ -185,7 +224,7 @@
                 probabilityMatrix: Array,
                 // synced by the redwood-decision component
                 myDecision: Number,
-                // probablility that game continues in any period-- which... I don't really understand what that means
+                // probablility that game continues in any period
                 delta: Number,
                 // deltat in ms
                 periodLength: Number,
@@ -211,6 +250,9 @@
                 subperiodLength: {
                     type: Number,
                 },
+                restLength: {
+                    type: Number,
+                },
                 displayedSubperiods: {
                     type: Number,
                 },
@@ -229,6 +271,9 @@
                     type: Boolean,
                     value: false,
                 },
+                numSub: {
+                    type: Number,
+                },
             },
             ready() {
                 // separate each player's payoffs into two separate arrays
@@ -242,6 +287,12 @@
 
                 this.myDecision = this.initialDecision;
                 this.averages = [];
+
+                // append initial parameter values to the table
+                this._showParameters();
+                // add the initial probability and payoff matrix values
+                this._showProbability();
+                this._showPayoff();
 
                 this._setupCurrSubperiodGraph();
                 this._setupHistoryGraph();
@@ -311,9 +362,9 @@
                 var buttonB = document.getElementById("buttonB").style;
                 if (this.fixedDecision == 1){
                     buttonA.backgroundColor = "green";
-                    buttonB.backgroundColor = "gray";
+                    buttonB.backgroundColor = "#aaa";
                 }else if (this.fixedDecision == 0){
-                    buttonA.backgroundColor = "gray";
+                    buttonA.backgroundColor = "#aaa";
                     buttonB.backgroundColor = "orange";
                 }
                 if (msg.realizedPayoffs) {
@@ -329,6 +380,10 @@
                         totalPayoff += subperiodRealizedPayoffs[i].y;
                     }
                     const averagePayoff = totalPayoff / subperiodRealizedPayoffs.length;
+
+                    // also update the current points box
+                    document.getElementById("curr-points").innerHTML = averagePayoff.toFixed(3);
+
                     this.currSubperiodGraph.series[1].update({
                         type: "line",
                         data: [[0-.5, averagePayoff], [this.subperiodLength-.3, averagePayoff]],
@@ -431,11 +486,16 @@
                     });
                 }
                 if (msg.hasOwnProperty('pauseProgress')) {
-                    this.hideProgress = false;
-                    this.pauseProgress = msg.pauseProgress;
-                } else {
-                    this.hideProgress = true;
+                    document.getElementById("progress").innerHTML = "LIVE!";
+                }else{
+                    document.getElementById("progress").innerHTML = "";                    
                 }
+                // if (msg.hasOwnProperty('pauseProgress')) {
+                //     this.hideProgress = false;
+                //     this.pauseProgress = msg.pauseProgress;
+                // } else {
+                //     this.hideProgress = true;
+                // }
             },
             _equals(d, decision) {
                 return d == decision;
@@ -466,13 +526,9 @@
                         enabled: false,
                         width: 150
                     },
-                    title: { text: null },
-                    // title: { text: "Current Subperiod",
-                    //          margin: 100,
-                    //          style: { color: "blue"
-
-                    //          }
-                    //  },
+                    title: { 
+                        text: null
+                    },
                     exporting: { enabled: false },
                     tooltip: { enabled: false },
                     legend: { enabled: false },
@@ -670,6 +726,37 @@
             _buttonActive(myDecision, buttonIndex) {
                 return myDecision == buttonIndex ? 'active' : '';
             },
+            _showParameters(){
+                var table = document.getElementById('param');
+                row = table.insertRow(table.rows.length);
+                this._createCell(row.insertCell(0), this.displayedSubperiods);
+                this._createCell(row.insertCell(1), this.subperiodLength);
+                this._createCell(row.insertCell(2), this.restLength);
+                this._createCell(row.insertCell(3), this.displayAverageAGraph);
+                this._createCell(row.insertCell(4), this.displayAverageBGraph);
+                this._createCell(row.insertCell(5), this.displayAverageABGraph);
+                this._createCell(row.insertCell(6), this.numSub);
+            },
+            _showProbability(){
+                var table = document.getElementById('probability');
+                this._createCell(table.rows[3].insertCell(table.rows[3].cells.length), this.mySignals[0]);
+                this._createCell(table.rows[3].insertCell(table.rows[3].cells.length), this.mySignals[1]);
+                this._createCell(table.rows[4].insertCell(table.rows[4].cells.length), this.mySignals[2]);
+                this._createCell(table.rows[4].insertCell(table.rows[4].cells.length), this.mySignals[3]);
+            },
+            _showPayoff(){
+                var table = document.getElementById('payoff');
+                this._createCell(table.rows[2].insertCell(table.rows[2].cells.length), this.myPayoffs[0]);
+                this._createCell(table.rows[2].insertCell(table.rows[2].cells.length), this.myPayoffs[1]);
+                this._createCell(table.rows[3].insertCell(table.rows[3].cells.length), this.myPayoffs[2]);
+                this._createCell(table.rows[3].insertCell(table.rows[3].cells.length), this.myPayoffs[3]);
+            },
+            _createCell(cell, text){
+                var div = document.createElement('div');
+                var txt = document.createTextNode(text); 
+                div.appendChild(txt);                    
+                cell.appendChild(div);                   
+            }
         });
     </script>
 
