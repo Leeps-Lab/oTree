@@ -35,6 +35,8 @@ def parse_config(config_file):
             'display_average_a_graph': True if row['display_average_a_graph'] == 'TRUE' else False,
             'display_average_b_graph': True if row['display_average_b_graph'] == 'TRUE' else False,
             'display_average_ab_graph': True if row['display_average_ab_graph'] == 'TRUE' else False,
+            'display_payoff_matrix': True if row['display_payoff_matrix'] == 'TRUE' else False,
+            'display_score': True if row['display_score'] == 'TRUE' else False,
             'num_subperiods': 0 if row['num_subperiods'] == 'RANDOM' else int(row['num_subperiods']),
             'payoff_matrix': [
                 [float(row['pi1(AGood)']), float(row['pi2(AGood)'])], [float(row['pi1(ABad)']), float(row['pi2(ABad)'])],
@@ -82,6 +84,12 @@ class Group(DecisionGroup):
 
     def display_average_ab_graph(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['display_average_ab_graph']
+
+    def display_payoff_matrix(self):
+        return parse_config(self.session.config['config_file'])[self.round_number-1]['display_payoff_matrix']
+
+    def display_score(self):
+        return parse_config(self.session.config['config_file'])[self.round_number-1]['display_score']
 
     def number_subperiods(self):
         return parse_config(self.session.config['config_file'])[self.round_number-1]['num_subperiods']
