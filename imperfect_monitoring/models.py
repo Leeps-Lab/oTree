@@ -147,9 +147,7 @@ class Group(DecisionGroup):
                 self.t = 0
         elif self.state == 'pause':
             msg = {
-                'pauseProgress': (self.t+1)/parse_config(self.session.config['config_file'])[self.round_number-1]['rest_length'],
-                'printTime': (parse_config(self.session.config['config_file'])[self.round_number-1]['rest_length']-1)/
-                              parse_config(self.session.config['config_file'])[self.round_number-1]['rest_length'],
+                'tick': self.t,
                 'state': self.state,
                 'fixedDecisions' : self.fixed_group_decisions,
                 'countGood': self.countGood,
@@ -166,7 +164,6 @@ class Group(DecisionGroup):
                     self.total_payoffs[player.participant.code] = 0
                     self.countGood[player.participant.code] = 0
                     self.periodResult[player.participant.code] = ""
-                    print(self.group_decisions[player.participant.code])
                     if player.participant.code in self.group_decisions:
                         self.fixed_group_decisions[player.participant.code] = self.group_decisions[player.participant.code]
         else:
@@ -217,6 +214,7 @@ class Group(DecisionGroup):
                     self.periodResult[player.participant.code] += "G"
             realized_payoffs[player.participant.code] = payoffs[payoff_index]
             self.total_payoffs[player.participant.code] += realized_payoffs[player.participant.code]
+            self.save()
 
         return realized_payoffs
 

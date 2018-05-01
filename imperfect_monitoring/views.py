@@ -92,7 +92,7 @@ def get_output_table(events):
     group = events[0].group
     config_columns = get_config_columns(group)
     for event in events:
-        if event.channel == 'tick' and 'pauseProgress' in event.value and event.value['pauseProgress'] == event.value['printTime']:
+        if event.channel == 'tick' and 'tick' in event.value and event.value['tick'] == 0:
             rows.append([
                 event.timestamp,
                 group.session.code,
