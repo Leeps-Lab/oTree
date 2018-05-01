@@ -131,7 +131,6 @@ class Group(DecisionGroup):
         # someone will forget this and get very confused when the tick functions use stale data.
         self.refresh_from_db()
         msg = {}
-        print(self.group_decisions)
         
         if self.state == 'results':
             msg = {
@@ -224,7 +223,6 @@ class Group(DecisionGroup):
     def _on_decisions_event(self, event=None, **kwargs):
         super()._on_decisions_event(event, **kwargs)
         if event:
-            print('decision event value: ', event.value)
             self.save()
 
 
