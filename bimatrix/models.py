@@ -3,7 +3,7 @@ import random
 
 from django.contrib.contenttypes.models import ContentType
 from otree.constants import BaseConstants
-from otree.models import BasePlayer, BaseSubsession
+from otree.models import BasePlayer, BaseSubsession, FloatField
 
 from otree_redwood.models import Event, DecisionGroup
 from otree_redwood.stats import track
@@ -85,21 +85,24 @@ class Subsession(BaseSubsession):
             return
         if play.id_in_group == 1:
             self.session.vars['row_vals'][participant.code] = value
-            self.session.save()
         else:
             self.session.vars['col_vals'][participant.code] = value
-            self.session.save()
+        self.session.save()
 
     def get_mean(self, row_player):
         sum_payoffs = 0
+        values = {}
         if row_player == 1:
-            for p in self.session.vars['row_vals']:
-                sum_payoffs += self.session.vars['row_vals'][p]
-            return sum_payoffs/len(self.session.vars['row_vals'])
+            values = self.session.vars['row_vals']
         else:
-            for p in self.session.vars['col_vals']:
-                sum_payoffs += self.session.vars['col_vals'][p]
-            return sum_payoffs/len(self.session.vars['col_vals'])
+            values = self.session.vars['col_vals']
+
+        print('get mean values:', values)
+        for p in values:
+            sum_payoffs += values[p]
+        print('sum payoffs:', sum_payoffs)
+        print('mean:', sum_payoffs / len(values))
+        return sum_payoffs/len(values)
 
     def before_session_starts(self):
         config = parse_config(self.session.config['config_file'])
@@ -109,14 +112,13 @@ class Subsession(BaseSubsession):
             self.group_randomly()
         else:
             self.group_randomly(fixed_id_in_group=True)
-        self.session.vars.update({'row_vals':{}, 'col_vals':{}, 'set_rows':False})
 
+        self.session.vars['row_vals'] = {}
+        self.session.vars['col_vals'] = {}
         for p in self.get_players():
             if p.id_in_group == 1:
-                print("row")
                 self.session.vars['row_vals'][p.participant.code] = 0
             else:
-                print("col")
                 self.session.vars['col_vals'][p.participant.code] = 0
 
 
@@ -159,19 +161,27 @@ class Group(DecisionGroup):
         if self.subsession.mean_matching():
             if not self.ran_ready_function:
                 return
+            print('pcode:', event.participant.code)
+            print('value:', event.value)
             self.subsession.update_mean_vals(event.participant, event.value)
+            self.session.refresh_from_db()
             # find a way to find the decision value because event value is not what we're looking for
             with track('_on_decisions_event'):
                 for group in self.subsession.get_groups():
                     for player in group.get_players():
                         group.group_decisions[player.participant.code] = self.subsession.get_mean(player.id_in_group)
                     group.save()
-                if not self.num_subperiods():
-                    self.send('group_decisions', self.group_decisions)
+                    if not self.num_subperiods():
+                        print('group decisions:', self.group_decisions)
+                        print('session.vars:', self.session.vars)
+                        group.send('group_decisions', self.group_decisions)
         else:
-            super()._on_decisions_event(self, event, kwargs)
+            super()._on_decisions_event(self, event, **kwargs)
+        print()
 
 class Player(BasePlayer):
+
+    current_decision = FloatField()
 
     def get_average_strategy(self):
         decisions = list(Event.objects.filter(
