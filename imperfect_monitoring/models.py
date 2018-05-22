@@ -170,11 +170,9 @@ class Group(DecisionGroup):
             raise ValueError('invalid state {}'.format(self.state))
 
         self.send('tick', msg)
-        self.save()
-
+        self.save(update_fields=['state', 't', 'total_payoffs', 'countGood', 'periodResult', 'fixed_group_decisions'])
 
     def realized_payoffs(self):
-
         payoff_matrix = parse_config(self.session.config['config_file'])[self.round_number-1]['payoff_matrix']
         probability_matrix = parse_config(self.session.config['config_file'])[self.round_number-1]['probability_matrix']
 
@@ -214,14 +212,8 @@ class Group(DecisionGroup):
                     self.periodResult[player.participant.code] += "G"
             realized_payoffs[player.participant.code] = payoffs[payoff_index]
             self.total_payoffs[player.participant.code] += realized_payoffs[player.participant.code]
-            self.save()
 
         return realized_payoffs
-
-    def _on_decisions_event(self, event=None, **kwargs):
-        super()._on_decisions_event(event, **kwargs)
-        if event:
-            self.save()
 
 
 class Player(BasePlayer):
