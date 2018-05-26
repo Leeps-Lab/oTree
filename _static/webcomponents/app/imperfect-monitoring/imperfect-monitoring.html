@@ -82,19 +82,6 @@
                 margin-bottom: 50px;
                 align-self: center;
             }
-
-            #buttonA {
-                background-color: #aaa;
-            }
-
-            #buttonB {
-                color: white;
-                background-color: #aaa;
-            }
-
-            .btn.focus, .btn:focus {
-                box-shadow: None;
-            }
         </style>
     
         <redwood-period></redwood-period>
@@ -126,7 +113,6 @@
 
             <div id="score" hidden$="[[ !displayScore ]]">
                 <div id="curr-points"></div>
-                <div id="subperiods"></div>
             </div>
         </div>
 
@@ -134,7 +120,7 @@
             <div id="progress">LOADING...</div>
 
             <div id="titles">
-            <div style="width:150px">CurrSubperiod</div>
+            <div style="width:150px">Cur. Period</div>
             <div style="width:600px">History Graph</div>
             <div style="width:100px" hidden$="[[ !displayAverageAGraph ]]">AverageA</div>
             <div style="width:100px" hidden$="[[ !displayAverageBGraph ]]">AverageB</div>
@@ -156,8 +142,8 @@
                 on-tap="_setMyDecision"
                 value=1
                 type="button"
-                data-toggle="button"
-                class$="btn btn-success btn-large [[ _buttonActive(myDecision, 1) ]]">
+                class$="btn btn-large [[ _buttonActive(myDecision, 1) ]]"
+                style="background-color: #dbdbdb; box-shadow: none;">
                 Contribute
             </button>
             <button
@@ -166,8 +152,8 @@
                 on-tap="_setMyDecision" 
                 value=0
                 type="button"
-                data-toggle="button"
-                class$="btn btn-warning btn-large [[ _buttonActive(myDecision, 0) ]]">
+                class$="btn btn-large [[ _buttonActive(myDecision, 0) ]]"
+                style="background-color: #dbdbdb; box-shadow: none;">
                 Don't Contribute
             </button>
         </div>
@@ -182,7 +168,10 @@
                 // 2x2 array of probability based on player's decision.
                 probabilityMatrix: Array,
                 // synced by the redwood-decision component
-                myDecision: Number,
+                myDecision: {
+                    type: Number,
+                    observer: '_setButtonBorder',
+                },
                 // probablility that game continues in any period
                 delta: Number,
                 // deltat in ms
@@ -275,7 +264,6 @@
                     lineWidth: 10,
                     data: [[0, this.myPayoffs[1]], [1, this.myPayoffs[1]]],
                 }]);
-                console.log(this.averageABGraph)
                 this.averageBGraph = this._setupAverageGraph(this.$.averageBGraph, [{
                     type: "line",
                     color: 'black',
@@ -326,11 +314,11 @@
                 var buttonA = document.getElementById("buttonA").style;
                 var buttonB = document.getElementById("buttonB").style;
                 if (this.fixedDecision == 1){
-                    buttonA.backgroundColor = "green";
-                    buttonB.backgroundColor = "#aaa";
+                    buttonA.backgroundColor = this.aColor;
+                    buttonB.backgroundColor = "#dbdbdb";
                 }else if (this.fixedDecision == 0){
-                    buttonA.backgroundColor = "#aaa";
-                    buttonB.backgroundColor = "orange";
+                    buttonA.backgroundColor = "#dbdbdb";
+                    buttonB.backgroundColor = this.bColor;
                 }
                 if (msg.realizedPayoffs) {
                     // Add realized payoffs to the current subperiod graph.
@@ -411,10 +399,6 @@
                         reversed: true
                     });
 
-                    // update the current subperiod information
-                    document.getElementById("subperiods").innerHTML =
-                        "Subperiod " + ((subperiodStart/this.subperiodLength) + 1)  + " out of " + this.numSub;
-
                     // Clear the current subperiod graph.
                     this.currSubperiodGraph.series[0].setData([]);
                     this.currSubperiodGraph.series[1].setData([]);
@@ -469,18 +453,6 @@
                 event.preventDefault();
                 var d = parseFloat(event.target.value);
                 this.myDecision = d;
-                console.log(this.myDecision);
-
-                // change the borders for the selected option
-                var buttonA = document.getElementById("buttonA").style;
-                var buttonB = document.getElementById("buttonB").style;
-                if (d == 1){
-                    buttonA.border = "thick solid #99c199";
-                    buttonB.border = "None";
-                }else if (d == 0){
-                    buttonA.border = "None";
-                    buttonB.border = "thick solid #ffc199";
-                }
             },
             // sets up current subperiod graph
             _setupCurrSubperiodGraph() {
@@ -710,7 +682,18 @@
                 var txt = document.createTextNode(text); 
                 div.appendChild(txt);                    
                 cell.appendChild(div);                   
-            }
+            },
+            _setButtonBorder(decision) {
+                var buttonA = document.getElementById("buttonA").style;
+                var buttonB = document.getElementById("buttonB").style;
+                if (decision === 1){
+                    buttonA.border = "thick solid #4f9b4f";
+                    buttonB.border = "None";
+                }else if (decision === 0){
+                    buttonA.border = "None";
+                    buttonB.border = "thick solid #fc9755";
+                }
+            },
         });
     </script>
 
