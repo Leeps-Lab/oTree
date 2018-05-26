@@ -669,13 +669,13 @@
             _showPossiblePayoff(){
                 var table = document.getElementById('payoff');
                 this._createCell(table.rows[1].insertCell(table.rows[1].cells.length),
-                    this.myPayoffs[0] + " w/ prob. " + (100 - this.mySignals[0]*100) + "% else " + this.myPayoffs[1]);
+                    this.myPayoffs[0] + "w/ prob. " + (100 - this.mySignals[0]*100) + "%, else " + this.myPayoffs[1]);
                 this._createCell(table.rows[1].insertCell(table.rows[1].cells.length),
-                    this.myPayoffs[0] + " w/ prob. " + (100 - this.mySignals[1]*100) + "% else " + this.myPayoffs[1]);
+                    this.myPayoffs[0] + " w/ prob. " + (100 - this.mySignals[1]*100) + "%, else " + this.myPayoffs[1]);
                 this._createCell(table.rows[2].insertCell(table.rows[2].cells.length),
-                    this.myPayoffs[2] + " w/ prob. " + (100 - this.mySignals[2]*100) + "% else " + this.myPayoffs[3]);
+                    this.myPayoffs[2] + " w/ prob. " + (100 - this.mySignals[2]*100) + "%, else " + this.myPayoffs[3]);
                 this._createCell(table.rows[2].insertCell(table.rows[2].cells.length),
-                    this.myPayoffs[2] + " w/ prob. " + (100 - this.mySignals[3]*100) + "% else " + this.myPayoffs[3]);
+                    this.myPayoffs[2] + " w/ prob. " + (100 - this.mySignals[3]*100) + "%, else " + this.myPayoffs[3]);
             },
             _createCell(cell, text){
                 var div = document.createElement('div');
