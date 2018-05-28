@@ -11,11 +11,15 @@ def vars_for_all_templates(self):
     }
 
 
-class Introduction(Page):
-    timeout_seconds = 100
+class Instructions(Page):
 
     def is_displayed(self):
         return self.round_number == 1
+    
+    def vars_for_template(self):
+        return {
+            'instructions_link': self.session.config['instructions_link'],
+        }
 
 
 class DecisionWaitPage(WaitPage):
@@ -117,7 +121,7 @@ def get_output_table(events):
     return rows
 
 page_sequence = [
-        Introduction,
+        Instructions,
         DecisionWaitPage,
         Decision,
         Results

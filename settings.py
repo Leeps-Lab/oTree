@@ -147,7 +147,8 @@ SESSION_CONFIGS = [
         'display_name': "Imperfect Monitoring",
         'num_demo_participants': 2,
         'app_sequence': ['imperfect_monitoring', 'payment_info'],
-        'config_file': 'demo.csv'
+        'config_file': 'demo.csv',
+        'instructions_link': 'https://docs.google.com/document/d/1DL8SQhmxEoO3KccrU7cG8KqD0UW2_PfPpXsVlxbRlLo/preview',
     },
     {
         'name': 'bimatrix',
