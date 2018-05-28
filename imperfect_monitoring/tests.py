@@ -9,7 +9,7 @@ class PlayerBot(Bot):
             return
 
         if self.player.round_number == 1:
-            yield views.Introduction
+            yield views.Instructions
         yield Submission(views.Decision, {}, check_html=False)
         yield views.Results
 
