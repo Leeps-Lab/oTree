@@ -99,17 +99,17 @@
                 <tr>
                     <th></th>
                     <th>If other player:</th>
-                    <th>Contribute</th>
-                    <th>Don't Contribute</th>
+                    <th style$="background-color: [[ aColor ]];">Contribute</th>
+                    <th style$="background-color: [[ bColor ]];">Don't Contribute</th>
                 </tr>
                 <tr>
                     <th rowspan="2">If you:</th> 
-                    <th>Contribute</th>
+                    <th style$="background-color: [[ aColor ]];">Contribute</th>
                     <td><b>[[ _array(myPayoffs, 0) ]]</b> with prob. [[ _arrayPercent(mySignals, 0) ]], else <b>[[ _array(myPayoffs, 1) ]]</b></td>
                     <td><b>[[ _array(myPayoffs, 0) ]]</b> with prob. [[ _arrayPercent(mySignals, 1) ]], else <b>[[ _array(myPayoffs, 1) ]]</b></td>
                 </tr>
                 <tr>
-                    <th>Don't Contribute</th>
+                    <th style$="background-color: [[ bColor ]];">Don't Contribute</th>
                     <td><b>[[ _array(myPayoffs, 2) ]]</b> with prob. [[ _arrayPercent(mySignals, 2) ]], else <b>[[ _array(myPayoffs, 3) ]]</b></td>
                     <td><b>[[ _array(myPayoffs, 2) ]]</b> with prob. [[ _arrayPercent(mySignals, 3) ]], else <b>[[ _array(myPayoffs, 3) ]]</b></td>
                 </tr>
@@ -124,7 +124,7 @@
             <div id="progress">LOADING...</div>
 
             <div id="titles">
-            <div style="width:150px">Cur. Period</div>
+            <div style="width:150px">Current Period</div>
             <div style="width:600px">History Graph</div>
             <div style="width:100px" hidden$="[[ !displayAverageAGraph ]]">AverageA</div>
             <div style="width:100px" hidden$="[[ !displayAverageBGraph ]]">AverageB</div>
