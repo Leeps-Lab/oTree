@@ -153,7 +153,8 @@ class Group(DecisionGroup):
                 'countGood': self.countGood,
                 'periodResult': self.periodResult,
                 'totalPayoffs': self.total_payoffs,
-                'numSubperiods': self.num_sub
+                'numSubperiods': self.num_sub,
+                'pauseProgress': True,
             }
             self.t += 1
             if self.t == parse_config(self.session.config['config_file'])[self.round_number-1]['rest_length']:

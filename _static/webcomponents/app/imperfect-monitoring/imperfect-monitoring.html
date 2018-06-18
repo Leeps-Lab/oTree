@@ -116,7 +116,7 @@
             </table>
 
             <div id="score" hidden$="[[ !displayScore ]]">
-                <div id="curr-points"></div>
+                Points so far: [[ _toFixed(totalPoints) ]]
             </div>
         </div>
 
@@ -234,6 +234,9 @@
                 numSub: {
                     type: Number,
                 },
+                totalPoints: {
+                    type: Number,
+                }
             },
             ready() {
                 // separate each player's payoffs into two separate arrays
@@ -305,6 +308,8 @@
                     lineWidth: 10,
                     data: [[0, this.myPayoffs[3]], [1, this.myPayoffs[3]]],
                 }]);
+
+                this.totalPoints = 0;
             },
             _onTick(event){
                 let msg = event.detail.payload;
@@ -335,8 +340,8 @@
                     }
                     const averagePayoff = totalPayoff / subperiodRealizedPayoffs.length;
 
-                    // also update the current points box
-                    document.getElementById("curr-points").innerHTML = "Points so far: " + averagePayoff.toFixed(3);
+                    // update total points
+                    this.totalPoints += averagePayoff;
 
                     this.currSubperiodGraph.series[1].update({
                         type: "line",
@@ -433,11 +438,18 @@
 
                     // Add horizontal plot lines to the history graph.
                     this.historyGraph.xAxis[0].addPlotLine({
-                        value: this.historyGraph.series[0].data.length-.3,
+                        value: this.historyGraph.series[0].data.length - this.subperiodLength - 0.3,
                         zIndex: 10,
                         width: 2,
                         color: 'black'
                     });
+
+                    if (subperiodStart > this.displayedSubperiods * this.subperiodLength) {
+                        this.historyGraph.update({
+                            chart: {height: 425},
+                            xAxis: {scrollbar: {enabled: true}}
+                        });
+                    }
                 }
                 if (msg.hasOwnProperty('pauseProgress')) {
                     document.getElementById("progress").innerHTML = "PAUSED";
@@ -533,7 +545,7 @@
                         enabled: false,
                         reflow: false,
                         width: 600,
-                        height: 425
+                        height: 400
                     },
                     title: { text: null },
                     exporting: { enabled: false },
@@ -545,7 +557,6 @@
                                     this.subperiodLength),
                         max: this.subperiodLength,
                         labels: { enabled: false },
-                        scrollbar: { enabled: true },
                         tickLength: 0
                     },
                     yAxis: {
@@ -683,6 +694,12 @@
                     buttonA.border = "None";
                     buttonB.border = "thick solid #fc9755";
                 }
+            },
+            _toFixed(num) {
+                if (Math.round(num) == num) {
+                    return num.toString();
+                }
+                return num.toFixed(2);
             },
         });
     </script>
