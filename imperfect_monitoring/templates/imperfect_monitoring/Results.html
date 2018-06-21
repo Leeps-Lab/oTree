@@ -12,6 +12,10 @@
             <td>You earned</td>
             <td>{{ player.payoff }}</td>
         </tr>
+        <tr>
+            <td>Your score so far is</td>
+            <td>{{ player.participant.payoff }}</td>
+        </tr>
     </table>
 
     {% next_button %}
