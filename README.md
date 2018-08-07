@@ -5,14 +5,17 @@
 ## Quick start
 
 ```
-> git clone https://github.com/Leeps-Lab/oTree.git
+> git clone --recurse-submodules https://github.com/Leeps-Lab/oTree.git
 > cd oTree
+> git submodule update --recursive --remote
 > virtualenv -p `which python3` venv
 > source venv/bin/activate
 > pip install -r requirements.txt
 > otree resetdb
 > otree runserver
 ```
+
+If you plan on modifying anything in any of the subrepos (that is, anything in the `bimatrix`, `imperfect_monitoring`, or `stochastic_bimatrix` folders), make sure you run `git checkout master` first in the subrepo you're modifying. If you don't, you may lose some work.
 
 ## Contact & support
 
