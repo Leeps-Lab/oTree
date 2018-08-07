@@ -156,6 +156,7 @@ SESSION_CONFIGS = [
         'num_demo_participants': 2,
         'app_sequence': ['bimatrix', 'payment_info'],
         'config_file': 'demo.csv',
+        'groups_per_silo': 2,
     },
     {
         'name': 'stochastic_bimatrix',

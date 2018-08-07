@@ -1,0 +1,9 @@
+[submodule "stochastic_bimatrix"]
+	path = stochastic_bimatrix
+	url = https://github.com/Leeps-Lab/stochastic_bimatrix
+[submodule "bimatrix"]
+	path = bimatrix
+	url = https://github.com/Leeps-Lab/bimatrix
+[submodule "imperfect_monitoring"]
+	path = imperfect_monitoring
+	url = https://github.com/Leeps-Lab/imperfect_monitoring
