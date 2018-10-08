@@ -143,6 +143,12 @@ SESSION_CONFIG_DEFAULTS = {
 
 SESSION_CONFIGS = [
     {
+        'name': 'evolving_managers',
+        'display_name': "Evolving Managers",
+        'num_demo_participants': 2,
+        'app_sequence': ['evolving_managers', 'payment_info'],
+    },
+    {
         'name': 'imperfect_monitoring',
         'display_name': "Imperfect Monitoring",
         'num_demo_participants': 2,
