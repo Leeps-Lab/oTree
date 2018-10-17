@@ -7,3 +7,6 @@
 [submodule "imperfect_monitoring"]
 	path = imperfect_monitoring
 	url = https://github.com/Leeps-Lab/imperfect_monitoring
+[submodule "evolving_managers"]
+	path = evolving_managers
+	url = https://github.com/Leeps-Lab/evolving_managers
