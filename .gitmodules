@@ -10,3 +10,9 @@
 [submodule "evolving_managers"]
 	path = evolving_managers
 	url = https://github.com/Leeps-Lab/evolving_managers
+[submodule "EvolvingManagers"]
+	path = EvolvingManagers
+	url = https://github.com/Leeps-Lab/EvolvingManagers
+[submodule "evolving-managers"]
+	path = evolving-managers
+	url = https://github.com/Leeps-Lab/evolving-managers
