@@ -10,3 +10,6 @@
 [submodule "evolving_managers"]
 	path = evolving_managers
 	url = https://github.com/Leeps-Lab/evolving_managers
+[submodule "timing_games"]
+	path = timing_games
+	url = https://github.com/Leeps-Lab/timing_games.git
