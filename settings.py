@@ -177,6 +177,19 @@ SESSION_CONFIGS = [
         'num_demo_participants': 2,
         'app_sequence': ['continuous_double_auction', 'payment_info'],
     },
+    {
+        'name': 'in_out',
+        'display_name': "In out",
+        'num_demo_participants': 1,
+        'app_sequence': ['inout', 'payment_info'],
+        'config_file': 'test.csv'
+    },
+    {
+        'name': 'BeAM',
+        'display_name': "BeAM",
+        'num_demo_participants': 1,
+        'app_sequence': ['beam', 'payment_info'],
+    }
 ]
 
 # anything you put after the below line will override
